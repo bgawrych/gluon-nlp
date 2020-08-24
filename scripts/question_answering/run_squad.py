@@ -557,6 +557,16 @@ def train(args):
                 batch_idx = mx.np.arange(tokens.shape[0], dtype=np.int32, ctx=ctx)
                 p_mask = 1 - p_mask  # In the network, we use 1 --> no_mask, 0 --> mask
                 with mx.autograd.record():
+                    # print(tokens.shape)
+                    # print(tokens)
+                    # print(segment_ids.shape)
+                    # print(segment_ids)
+                    # print(valid_length.shape)
+                    # print(valid_length)
+                    # print(p_mask.shape)
+                    # print(p_mask)
+                    # print(gt_start.shape)
+                    # print(gt_start)
                     start_logits, end_logits, answerable_logits \
                         = qa_net(tokens, segment_ids, valid_length, p_mask, gt_start)
                     sel_start_logits = start_logits[batch_idx, gt_start]
