@@ -303,7 +303,7 @@ class ModelForQAConditionalV1(HybridBlock):
         answerable_logits = self.get_answerable_logits(F, contextual_embeddings, p_mask)
         return start_logits, end_logits, answerable_logits
 
-    def inference(self, tokens, token_types, valid_length, p_mask,
+    def inference(self, F, tokens, token_types, valid_length, p_mask,
                   start_top_n: int = 5, end_top_n: int = 5):
         """Get the inference result with beam search
 
@@ -346,15 +346,15 @@ class ModelForQAConditionalV1(HybridBlock):
             contextual_embeddings = self.backbone(tokens, token_types, valid_length)
         else:
             contextual_embeddings = self.backbone(tokens, valid_length)
-        start_logits = self.get_start_logits(mx.nd, contextual_embeddings, p_mask)
+        start_logits = self.get_start_logits(F, contextual_embeddings, p_mask)
         # The shape of start_top_index will be (..., start_top_n)
-        start_top_logits, start_top_index = mx.npx.topk(start_logits, k=start_top_n, axis=-1,
+        start_top_logits, start_top_index = mx.symbol.topk(start_logits.as_nd_ndarray(), k=start_top_n, axis=-1,
                                                         ret_typ='both')
-        end_logits = self.get_end_logits(mx.nd, contextual_embeddings, start_top_index, p_mask)
+        end_logits = self.get_end_logits(F, contextual_embeddings, start_top_index.as_np_ndarray(), p_mask)
         # Note that end_top_index and end_top_log_probs have shape (bsz, start_n_top, end_n_top)
         # So that for each start position, there are end_n_top end positions on the third dim.
-        end_top_logits, end_top_index = mx.npx.topk(end_logits, k=end_top_n, axis=-1,
+        end_top_logits, end_top_index = mx.symbol.topk(end_logits.as_nd_ndarray(), k=end_top_n, axis=-1,
                                                     ret_typ='both')
-        answerable_logits = self.get_answerable_logits(mx.nd, contextual_embeddings, p_mask)
-        return start_top_logits, start_top_index, end_top_logits, end_top_index, \
-                    answerable_logits
+        answerable_logits = self.get_answerable_logits(F, contextual_embeddings, p_mask)
+        return start_top_logits.as_np_ndarray(), start_top_index.as_np_ndarray(), end_top_logits.as_np_ndarray(), end_top_index.as_np_ndarray(), \
+                    answerable_logits.as_np_ndarray()

@@ -38,7 +38,7 @@ logger.setLevel(logging.INFO)
 
 mx.npx.set_np()
 
-CACHE_PATH = os.path.realpath(os.path.join(os.path.realpath('/home/wihajster/Desktop/gluon-nlp/scripts/question_answering'), '..', 'cached'))
+CACHE_PATH = os.path.realpath(os.path.join(os.path.realpath('/home/wihajster/Desktop/gluon-nlp/electra_large_squad_v2'), '..', 'cached'))
 if not os.path.exists(CACHE_PATH):
     os.makedirs(CACHE_PATH, exist_ok=True)
 
@@ -59,7 +59,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='Question Answering example. '
                     'We fine-tune the pretrained model on SQuAD dataset.')
-    parser.add_argument('--model_name', type=str, default='google_electra_small',
+    parser.add_argument('--model_name', type=str, default='google_electra_large',
                         help='Name of the pretrained model.')
     parser.add_argument('--do_train', action='store_true',
                         help='Whether to train the model')
@@ -68,7 +68,7 @@ def parse_args():
     parser.add_argument('--data_dir', type=str, default='squad')
     parser.add_argument('--version', default='2.0', choices=['1.1', '2.0'],
                         help='Version of the SQuAD dataset.')
-    parser.add_argument('--output_dir', type=str, default='squad_out',
+    parser.add_argument('--output_dir', type=str, default='.',
                         help='The output directory where the model params will be written.'
                              ' default is squad_out')
     # Communication
@@ -91,9 +91,9 @@ def parse_args():
     parser.add_argument('--num_train_steps', type=int, default=None,
                         help='The number of training steps. Note that epochs will be ignored '
                              'if training steps are set')
-    parser.add_argument('--batch_size', type=int, default=4,
+    parser.add_argument('--batch_size', type=int, default=8,
                         help='Batch size. Number of examples per gpu in a minibatch. default is 32')
-    parser.add_argument('--eval_batch_size', type=int, default=4,
+    parser.add_argument('--eval_batch_size', type=int, default=16,
                         help='Evaluate batch size. Number of examples per gpu in a minibatch for '
                              'evaluation.')
     parser.add_argument('--max_grad_norm', type=float, default=1.0,
@@ -147,7 +147,7 @@ def parse_args():
                         help='The maximum length of an answer that can be generated. This is '
                              'needed because the start and end predictions are not conditioned '
                              'on one another. default is 30')
-    parser.add_argument('--param_checkpoint', type=str, default=None,
+    parser.add_argument('--param_checkpoint', type=str, default='fintune_google_electra_large_squad_2.0/google_electra_large_squad2.0_8159.params',
                         help='The parameter checkpoint for evaluating the model')
     parser.add_argument('--backbone_path', type=str, default=None,
                         help='The parameter checkpoint of backbone model')
@@ -182,7 +182,6 @@ class SquadDatasetProcessor:
 
     def __init__(self, tokenizer, doc_stride, max_seq_length, max_query_length):
         """
-
         Parameters
         ----------
         tokenizer
@@ -233,23 +232,17 @@ class SquadDatasetProcessor:
 
     def process_sample(self, feature: SquadFeature):
         """Process the data to the following format.
-
         Note that we mask all the special tokens except the CLS token. The reason for not masking
         the CLS token is that if the question is not answerable, we will set the start and end to
         be 0.
-
-
         Merged:      <CLS> Question <SEP> Context <SEP>
         Segment IDs:  0       0       0      1      1
         Mask:         0       1       1      0      1
-
         Here, we need to emphasize that when mask = 1, the data are actually not masked!
-
         Parameters
         ----------
         feature
             Tokenized SQuAD feature
-
         Returns
         -------
         ret
@@ -312,13 +305,11 @@ class SquadDatasetProcessor:
 
     def get_train(self, features, skip_unreliable=True):
         """Get the training dataset
-
         Parameters
         ----------
         features
         skip_unreliable
             Whether to skip the unreliable spans in the training set
-
         Returns
         -------
         train_dataset
@@ -345,7 +336,6 @@ class SquadDatasetProcessor:
 def get_squad_features(args, tokenizer, segment):
     """
     Get processed data features of SQuADExampls
-
     Parameters
     ----------
     args : argparse.Namespace
@@ -353,7 +343,6 @@ def get_squad_features(args, tokenizer, segment):
         Tokenizer instance
     segment: str
         train or dev
-
     Returns
     -------
     data_features
@@ -400,7 +389,6 @@ def get_network(model_name,
                 dtype='float32'):
     """
     Get the network that fine-tune the Question Answering Task
-
     Parameters
     ----------
     model_name : str
@@ -413,7 +401,6 @@ def get_network(model_name,
         Path to a Fine-tuned checkpoint
     backbone_path: str
         Path to the backbone model to be loaded in qa_net
-
     Returns
     -------
     cfg
@@ -485,10 +472,8 @@ def predict_extended(original_feature,
                      start_top_n=5,
                      end_top_n=5):
     """Get prediction results for SQuAD.
-
     Start Logits: (B, N_start)
     End Logits: (B, N_start, N_end)
-
     Parameters
     ----------
     original_feature:
@@ -597,7 +582,7 @@ def predict_extended(original_feature,
     return not_answerable_score, nbest[0][0], nbest_json
 
 
-def evaluate(args, last=True):
+def evaluateX(args, last=True):
     store, num_workers, rank, local_rank, is_master_node, ctx_l = init_comm(
         args.comm_backend, args.gpus)
     # only evaluate once
@@ -830,7 +815,7 @@ def get_model(last=True):
 
 
 
-a = get_model()
+# a = get_model()
 
 
 
@@ -849,84 +834,82 @@ a = get_model()
 
 
 
-npx.set_np() # włączenie semantyki numpyowej - różni się od NDArray m.in., tym że pozwala na 0 shape np. (2,0,1)
+# npx.set_np() # włączenie semantyki numpyowej - różni się od NDArray m.in., tym że pozwala na 0 shape np. (2,0,1)
 
-"""
-Hybrydize - samo w sobie nic nie robi od ręki - zmienia tylko pole w obiekcie, że hybrydyzacja jest aktywna.
-Doperio przy pierwszym forward pass'ie wywoływana jest logika. Najpierw jest budowany cached_op - jeśli podano backend,
-dokonywana jest optymalizacja za pomocą funkcji optimize_for (woła MXOptimizeForBackend w C Api) <- Prawdopodobnie
-jest to Subgraph API, o którym wspomniał Xinyu w swojej prezentacji. 
-Po wybduwoaniu cached_op dzieje się jakaś magia z "formatami" i dopiero jest wołany forward pass
+# """
+# Hybrydize - samo w sobie nic nie robi od ręki - zmienia tylko pole w obiekcie, że hybrydyzacja jest aktywna.
+# Doperio przy pierwszym forward pass'ie wywoływana jest logika. Najpierw jest budowany cached_op - jeśli podano backend,
+# dokonywana jest optymalizacja za pomocą funkcji optimize_for (woła MXOptimizeForBackend w C Api) <- Prawdopodobnie
+# jest to Subgraph API, o którym wspomniał Xinyu w swojej prezentacji. 
+# Po wybduwoaniu cached_op dzieje się jakaś magia z "formatami" i dopiero jest wołany forward pass
+# Pytanie: Czy hybridize bez podanego backendu cokolwiek optymalizuje?
+# """
+# from mxnet.util import use_np
+# from mxnet.gluon import nn, HybridBlock
 
+# @use_np
+# class QuantizeHybride(HybridBlock):
+#     def __init__(self, backbone):
+#         super(QuantizeHybride, self).__init__()
+#         self.backbone = backbone
 
-Pytanie: Czy hybridize bez podanego backendu cokolwiek optymalizuje?
+#     def hybrid_forward(self, F, tokens, token_types, valid_length, p_mask):
+#         start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits = self.backbone.inference(F, tokens, token_types, valid_length, p_mask)
+#         return start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits
 
-"""
-from mxnet.util import use_np
-from mxnet.gluon import nn, HybridBlock
+# q = QuantizeHybride(a)
 
-@use_np
-class QuantizeHybride(HybridBlock):
-    def __init__(self, backbone):
-        super(QuantizeHybride, self).__init__()
-        self.backbone = backbone
-        
-    def hybrid_forward(self, F, tokens, token_types, valid_length, p_mask):
-        start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits = self.backbone.inference(F, tokens, token_types, valid_length, p_mask)
-        return start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits
-    
-q = QuantizeHybride(a)
+# #npx.set_np()
+# q.hybridize()
 
-#npx.set_np()
-q.hybridize()
+# # pierwszy forward pass, który tworzy cached_op /\
+# q.forward(np.zeros((4, 10)), np.zeros((4, 10)), np.zeros((4,)), np.zeros((4, 10)))
+# mx.nd.waitall()
+# # export HybridBlock do JSON'a
+# q.export('model_a')
+# #wczytanie JSON'a, ale nie jako HybridBlock, tylko jako Symbol
+# sym, arg_params, aux_params = mx.model.load_checkpoint('model_a', 0)
+# ## Dwa powyższe konwertują HybridBlock -> Symbol / Symbol Group
 
-# pierwszy forward pass, który tworzy cached_op /\
-q.forward(np.zeros((4, 10)), np.zeros((4, 10)), np.zeros((4,)), np.zeros((4, 10)))
-mx.nd.waitall()
-# export HybridBlock do JSON'a
-q.export('model_a')
-#wczytanie JSON'a, ale nie jako HybridBlock, tylko jako Symbol
-sym, arg_params, aux_params = mx.model.load_checkpoint('model_a', 0)
-## Dwa powyższe konwertują HybridBlock -> Symbol / Symbol Group
+# ## Wizualizacja symbolu - grafu
+# mx.viz.plot_network(sym)
 
-## Wizualizacja symbolu - grafu
-mx.viz.plot_network(sym)
 
 
 
 
+# ## Tworzenie zoptymalizowane symbolu dla danego backendu
+# ## optymalizacja grafu
+# sym = sym.get_backend_symbol('MKLDNN_QUANTIZE')
 
-## Tworzenie zoptymalizowane symbolu dla danego backendu
-## optymalizacja grafu
-sym = sym.get_backend_symbol('MKLDNN_QUANTIZE')
+# ## Pytanie: Czym się rózni funkcja get_backend_symbol() i optimize_for()
 
-## Pytanie: Czym się rózni funkcja get_backend_symbol() i optimize_for()
+# # (optional) visualize fused float32 model
+# mx.viz.plot_network(sym)
 
-# (optional) visualize fused float32 model
-mx.viz.plot_network(sym)
 
 
 
 
 
 
+# # quantize configs
+# # set exclude layers
 
-# quantize configs
-# set exclude layers
+# from mxnet.contrib.quantization import *
+# excluded_names = []
+# # set calib mode.
+# calib_mode = 'entropy'
+# # set quantized_dtype
+# quantized_dtype = 'auto'
+# qsym, qarg_params, aux_params, collector = quantize_graph(sym=sym, arg_params=arg_params, aux_params=aux_params,
+#                                                           excluded_sym_names=excluded_names,
+#                                                           calib_mode=calib_mode, quantize_mode='full',
+#                                                           quantized_dtype=quantized_dtype)
+# # save quantized model
+# mx.model.save_checkpoint('quantized-relectra', 0, qsym, qarg_params, aux_params)
+# mx.viz.plot_network(qsym)
 
-from mxnet.contrib.quantization import *
-excluded_names = []
-# set calib mode.
-calib_mode = 'entropy'
-# set quantized_dtype
-quantized_dtype = 'auto'
-qsym, qarg_params, aux_params, collector = quantize_graph(sym=sym, arg_params=arg_params, aux_params=aux_params,
-                                                          excluded_sym_names=excluded_names,
-                                                          calib_mode=calib_mode, quantize_mode='full',
-                                                          quantized_dtype=quantized_dtype)
-# save quantized model
-mx.model.save_checkpoint('quantized-relectra', 0, qsym, qarg_params, aux_params)
-mx.viz.plot_network(qsym)
 
 
 
@@ -934,88 +917,87 @@ mx.viz.plot_network(qsym)
 
 
 
-
-args = parse_args()
-store, num_workers, rank, local_rank, is_master_node, ctx_l = init_comm(
-    args.comm_backend, args.gpus)
-
-ctx_l = parse_ctx(args.gpus)
-
-print(collector.collect)
-
-cfg, tokenizer, qa_net, use_segmentation = get_network(
-    args.model_name, ctx_l, args.classifier_dropout)
-
-qa_net.register_op_hook(collector.collect, monitor_all=True) # sym._simple_bind(ctx=cpu())
-#exe.copy_params_from(arg_params = arg_params, aux_params = aux_params)
-#exe._register_op_hook(collector.collect, monitor_all=True)
-#exe.set_monitor_callback(collector.collect, monitor_all=True)
-print(type(qa_net))
-dev_features = get_squad_features(args, tokenizer, segment='dev')
-dev_data_path = os.path.join(args.data_dir, 'dev-v{}.json'.format(args.version))
-dataset_processor = SquadDatasetProcessor(tokenizer=tokenizer,
-                                          doc_stride=args.doc_stride,
-                                          max_seq_length=args.max_seq_length,
-                                          max_query_length=args.max_query_length)
-dev_all_chunk_features = []
-dev_chunk_feature_ptr = [0]
-for feature in dev_features:
-    chunk_features = dataset_processor.process_sample(feature)
-    dev_all_chunk_features.extend(chunk_features)
-    dev_chunk_feature_ptr.append(dev_chunk_feature_ptr[-1] + len(chunk_features))
-
-    def eval_validation():
-        """
-        Model inference during validation or final evaluation.
-        """
-        dev_dataloader = mx.gluon.data.DataLoader(
-            dev_all_chunk_features,
-            batchify_fn=dataset_processor.BatchifyFunction,
-            batch_size=args.eval_batch_size,
-            num_workers=0,
-            shuffle=False)
-
-        log_interval = args.eval_log_interval
-        all_results = []
-        epoch_tic = time.time()
-        tic = time.time()
-        epoch_size = len(dev_features)
-        total_num = 0
-        log_num = 0
-        for batch_idx, dev_batch in enumerate(grouper(dev_dataloader, len(ctx_l))):
-            # Predict for each chunk
-            for sample, ctx in zip(dev_batch, ctx_l):
-                if sample is None:
-                    continue
-                # Copy the data to device
-                tokens = sample.data.as_in_ctx(ctx)
-                total_num += len(tokens)
-                log_num += len(tokens)
-                segment_ids = sample.segment_ids.as_in_ctx(ctx) if use_segmentation else None
-                gt_start = sample.gt_start.as_in_ctx(ctx).astype(np.int32)
-                valid_length = sample.valid_length.as_in_ctx(ctx)
-                p_mask = sample.masks.as_in_ctx(ctx)
-                p_mask = 1 - p_mask  # In the network, we use 1 --> no_mask, 0 --> mask
-                start_logits, end_logits, answerable_logits \
-                    = qa_net(tokens, segment_ids, valid_length, p_mask, gt_start)
-            break
-
-eval_validation()
-
-
-
-
-
-
-
-
-
-
-
-cqsym, cqarg_params, aux_params = calib_graph(qsym=qsym, arg_params=arg_params, aux_params=aux_params,
-                                            collector=collector, calib_mode=calib_mode,
-                                            quantized_dtype=quantized_dtype, logger=logger)
-mx.model.save_checkpoint('calibrated', 0, cqsym, cqarg_params, aux_params)
+# args = parse_args()
+# store, num_workers, rank, local_rank, is_master_node, ctx_l = init_comm(
+#     args.comm_backend, args.gpus)
+
+# ctx_l = parse_ctx(args.gpus)
+
+# print(collector.collect)
+
+# cfg, tokenizer, qa_net, use_segmentation = get_network(
+#     args.model_name, ctx_l, args.classifier_dropout)
+
+# qa_net.register_op_hook(collector.collect, monitor_all=True) # sym._simple_bind(ctx=cpu())
+# #exe.copy_params_from(arg_params = arg_params, aux_params = aux_params)
+# #exe._register_op_hook(collector.collect, monitor_all=True)
+# #exe.set_monitor_callback(collector.collect, monitor_all=True)
+# print(type(qa_net))
+# dev_features = get_squad_features(args, tokenizer, segment='dev')
+# dev_data_path = os.path.join(args.data_dir, 'dev-v{}.json'.format(args.version))
+# dataset_processor = SquadDatasetProcessor(tokenizer=tokenizer,
+#                                           doc_stride=args.doc_stride,
+#                                           max_seq_length=args.max_seq_length,
+#                                           max_query_length=args.max_query_length)
+# dev_all_chunk_features = []
+# dev_chunk_feature_ptr = [0]
+# for feature in dev_features:
+#     chunk_features = dataset_processor.process_sample(feature)
+#     dev_all_chunk_features.extend(chunk_features)
+#     dev_chunk_feature_ptr.append(dev_chunk_feature_ptr[-1] + len(chunk_features))
+
+#     def eval_validation():
+#         """
+#         Model inference during validation or final evaluation.
+#         """
+#         dev_dataloader = mx.gluon.data.DataLoader(
+#             dev_all_chunk_features,
+#             batchify_fn=dataset_processor.BatchifyFunction,
+#             batch_size=args.eval_batch_size,
+#             num_workers=0,
+#             shuffle=False)
+
+#         log_interval = args.eval_log_interval
+#         all_results = []
+#         epoch_tic = time.time()
+#         tic = time.time()
+#         epoch_size = len(dev_features)
+#         total_num = 0
+#         log_num = 0
+#         for batch_idx, dev_batch in enumerate(grouper(dev_dataloader, len(ctx_l))):
+#             # Predict for each chunk
+#             for sample, ctx in zip(dev_batch, ctx_l):
+#                 if sample is None:
+#                     continue
+#                 # Copy the data to device
+#                 tokens = sample.data.as_in_ctx(ctx)
+#                 total_num += len(tokens)
+#                 log_num += len(tokens)
+#                 segment_ids = sample.segment_ids.as_in_ctx(ctx) if use_segmentation else None
+#                 gt_start = sample.gt_start.as_in_ctx(ctx).astype(np.int32)
+#                 valid_length = sample.valid_length.as_in_ctx(ctx)
+#                 p_mask = sample.masks.as_in_ctx(ctx)
+#                 p_mask = 1 - p_mask  # In the network, we use 1 --> no_mask, 0 --> mask
+#                 start_logits, end_logits, answerable_logits \
+#                     = qa_net(tokens, segment_ids, valid_length, p_mask, gt_start)
+#             break
+
+# eval_validation()
+
+
+
+
+
+
+
+
+
+
+
+# cqsym, cqarg_params, aux_params = calib_graph(qsym=qsym, arg_params=arg_params, aux_params=aux_params,
+#                                             collector=collector, calib_mode=calib_mode,
+#                                             quantized_dtype=quantized_dtype, logger=logger)
+# mx.model.save_checkpoint('calibrated', 0, cqsym, cqarg_params, aux_params)
 
 
 
@@ -1055,11 +1037,10 @@ def evaluate(model, last=True):
         dev_all_chunk_features.extend(chunk_features)
         dev_chunk_feature_ptr.append(dev_chunk_feature_ptr[-1] + len(chunk_features))
 
-    def eval_validation():
+    def eval_validation(best_eval):
         """
         Model inference during validation or final evaluation.
         """
-        best_eval = None
         dev_dataloader = mx.gluon.data.DataLoader(
             dev_all_chunk_features,
             batchify_fn=dataset_processor.BatchifyFunction,
@@ -1084,17 +1065,17 @@ def evaluate(model, last=True):
                 total_num += len(tokens)
                 log_num += len(tokens)
                 segment_ids = sample.segment_ids.as_in_ctx(ctx) if use_segmentation else None
-                
+
                 gt_start = sample.gt_start.as_in_ctx(ctx).astype(np.int32)
                 valid_length = sample.valid_length.as_in_ctx(ctx)
                 p_mask = sample.masks.as_in_ctx(ctx)
                 p_mask = 1 - p_mask  # In the network, we use 1 --> no_mask, 0 --> mask
                 gt_start = sample.gt_start.as_in_ctx(ctx).astype(np.int32)
-                
+
                 start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits \
                     = model(tokens, segment_ids, valid_length, p_mask)
-                    
-        
+
+
                 for i, qas_id in enumerate(sample.qas_id):
                     result = RawResultExtended(qas_id=qas_id,
                                                start_top_logits=start_top_logits[i].asnumpy(),
@@ -1104,7 +1085,7 @@ def evaluate(model, last=True):
                                                answerable_logits=answerable_logits[i].asnumpy())
 
                     all_results.append(result)
-
+            break
 
             # logging
             if (batch_idx + 1) % log_interval == 0:
@@ -1198,9 +1179,9 @@ def evaluate(model, last=True):
     best_eval = {}
     for ckpt_name in ckpt_candidates:
         logging.info('Starting evaluate the checkpoint {}'.format(ckpt_name))
-        ckpt_path = os.path.join(args.output_dir, ckpt_name)
-        qa_net.load_parameters(ckpt_path, ctx=ctx_l, cast_dtype=True)
-        best_eval = eval_validation(ckpt_name, best_eval)
+        #ckpt_path = os.path.join(args.output_dir, ckpt_name)
+        #qa_net.load_parameters(ckpt_path, ctx=ctx_l, cast_dtype=True)
+        best_eval = eval_validation(best_eval)
 
     print('The best evaluated results are {}'.format(json.dumps(best_eval)))
     output_eval_results_file = os.path.join(args.output_dir, 'best_results.json')
@@ -1225,28 +1206,28 @@ def evaluate(model, last=True):
 import time
 from mxnet import profiler
 
-profiler.set_config(profile_all=True, aggregate_stats=True, continuous_dump=True, filename='profile_output.json')
+#profiler.set_config(profile_all=True, aggregate_stats=True, continuous_dump=True, filename='profile_output.json')
+print("Evaluation FP32 and quantized")
 
-
-netxx = mx.gluon.SymbolBlock.imports('model_a-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'model_a-0000.params')
-netxx.hybridize(static_shape=True, static_alloc=True)
-profiler.set_state('run')
-tic = time.time()
-res = evaluate(netxx)
-profiler.set_state('stop')
-print(res)
-print(profiler.dumps(reset=True))
-print(time.time() - tic)
+# netxx = mx.gluon.SymbolBlock.imports('model_a-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'model_a-0000.params')
+# netxx.hybridize(static_shape=True, static_alloc=True)
+# #profiler.set_state('run')
+# tic = time.time()
+# res = evaluate(netxx)
+# #profiler.set_state('stop')
+# print(res)
+# #print(profiler.dumps(reset=True))
+# print(time.time() - tic)
 
 
 
 quantized_net = mx.gluon.SymbolBlock.imports('calibrated-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'calibrated-0000.params')
 quantized_net.hybridize(static_shape=True, static_alloc=True)
-profiler.set_state('run')
+#profiler.set_state('run')
 tic = time.time()
 res2 = evaluate(quantized_net)
 print(res2)
-print(profiler.dumps(reset=True))
+#print(profiler.dumps(reset=True))
 print(time.time() - tic)
 
 
