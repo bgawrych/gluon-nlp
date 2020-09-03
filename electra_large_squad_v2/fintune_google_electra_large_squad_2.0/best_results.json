@@ -1,0 +1,16 @@
+{
+    "exact": 44.68963193801061,
+    "f1": 47.46428824243674,
+    "total": 11873,
+    "HasAns_exact": 89.0519568151147,
+    "HasAns_f1": 94.60922643428665,
+    "HasAns_total": 5928,
+    "NoAns_exact": 0.4541631623212784,
+    "NoAns_f1": 0.4541631623212784,
+    "NoAns_total": 5945,
+    "best_exact": 88.40225722226901,
+    "best_exact_thresh": -1.6531989574432373,
+    "best_f1": 90.88002366395989,
+    "best_f1_thresh": -1.6531989574432373,
+    "best_ckpt": "google_electra_large_squad2.0_8159.params"
+}
