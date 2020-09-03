@@ -11,7 +11,6 @@ python3 run_squad.py \
     --output_dir fintune_${MODEL_NAME}_squad_${VERSION} \
     --version ${VERSION} \
     --do_eval \
-    --do_train \
     --batch_size 4 \
     --num_accumulated 3 \
     --gpus -1 \
