@@ -135,4 +135,9 @@ ci/rat/apache-rat.jar
 
 
 electra_large_squad_v2/cached
+cached/
 electra_large_squad_v2/fintune_google_electra_large_squad_2.0/google_electra_large_squad2.0_8159.params
+electra_large_squad_v2/*.params
+electra_large_squad_v2/*/*.params
+electra_large_squad_v2/*/*.json
+electra_large_squad_v2/*.json

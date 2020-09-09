@@ -35,7 +35,7 @@ except ImportError:
 logging.basicConfig()
 logger = logging.getLogger('logger')
 logger.setLevel(logging.INFO)
-
+from mxnet.util import use_np
 mx.npx.set_np()
 
 CACHE_PATH = os.path.realpath(os.path.join(os.path.realpath('/home/bgawrych/gluon-nlp/electra_large_squad_v2'), '..', 'cached'))
@@ -43,17 +43,7 @@ if not os.path.exists(CACHE_PATH):
     os.makedirs(CACHE_PATH, exist_ok=True)
 
 
-
-
-
-
-
-
-
-
-
-
-
+## Ponizsze funckje pochadza z run_script.py - START
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -162,22 +152,7 @@ def parse_args():
     return args
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@use_np
 class SquadDatasetProcessor:
 
     def __init__(self, tokenizer, doc_stride, max_seq_length, max_query_length):
@@ -376,11 +351,6 @@ def get_squad_features(args, tokenizer, segment):
 
 
 
-
-
-
-
-
 def get_network(model_name,
                 ctx_l,
                 dropout=0.1,
@@ -434,24 +404,10 @@ def get_network(model_name,
         qa_net.initialize(ctx=ctx_l)
     else:
         qa_net.load_parameters(checkpoint_path, ctx=ctx_l, cast_dtype=True)
+        print("\n\n\nLOADED PARAMETERS\n\n\n")
     qa_net.hybridize()
 
     return cfg, tokenizer, qa_net, use_segmentation
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 RawResultExtended = collections.namedtuple(
@@ -582,180 +538,7 @@ def predict_extended(original_feature,
     return not_answerable_score, nbest[0][0], nbest_json
 
 
-def evaluateX(args, last=True):
-    store, num_workers, rank, local_rank, is_master_node, ctx_l = init_comm(
-        args.comm_backend, args.gpus)
-    # only evaluate once
-    if rank != 0:
-        print('Skipping node {}'.format(rank))
-        return
-    ctx_l = parse_ctx(args.gpus)
-    print(
-        'Srarting inference without horovod on the first node on device {}'.format(
-            str(ctx_l)))
-
-    cfg, tokenizer, qa_net, use_segmentation = get_network(
-        args.model_name, ctx_l, args.classifier_dropout)
-
-    print('Prepare dev data')
-    dev_features = get_squad_features(args, tokenizer, segment='dev')
-    dev_data_path = os.path.join(args.data_dir, 'dev-v{}.json'.format(args.version))
-    dataset_processor = SquadDatasetProcessor(tokenizer=tokenizer,
-                                              doc_stride=args.doc_stride,
-                                              max_seq_length=args.max_seq_length,
-                                              max_query_length=args.max_query_length)
-    dev_all_chunk_features = []
-    dev_chunk_feature_ptr = [0]
-    for feature in dev_features:
-        chunk_features = dataset_processor.process_sample(feature)
-        dev_all_chunk_features.extend(chunk_features)
-        dev_chunk_feature_ptr.append(dev_chunk_feature_ptr[-1] + len(chunk_features))
-
-    def eval_validation(ckpt_name, best_eval):
-        """
-        Model inference during validation or final evaluation.
-        """
-        dev_dataloader = mx.gluon.data.DataLoader(
-            dev_all_chunk_features,
-            batchify_fn=dataset_processor.BatchifyFunction,
-            batch_size=args.eval_batch_size,
-            num_workers=0,
-            shuffle=False)
-
-        log_interval = args.eval_log_interval
-        all_results = []
-        epoch_tic = time.time()
-        tic = time.time()
-        epoch_size = len(dev_features)
-        total_num = 0
-        log_num = 0
-        for batch_idx, dev_batch in enumerate(grouper(dev_dataloader, len(ctx_l))):
-            # Predict for each chunk
-            for sample, ctx in zip(dev_batch, ctx_l):
-                if sample is None:
-                    continue
-                # Copy the data to device
-                tokens = sample.data.as_in_ctx(ctx)
-                total_num += len(tokens)
-                log_num += len(tokens)
-                segment_ids = sample.segment_ids.as_in_ctx(ctx) if use_segmentation else None
-                valid_length = sample.valid_length.as_in_ctx(ctx)
-                p_mask = sample.masks.as_in_ctx(ctx)
-                p_mask = 1 - p_mask  # In the network, we use 1 --> no_mask, 0 --> mask
-                start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits \
-                    = qa_net.inference(tokens, segment_ids, valid_length, p_mask,
-                                       args.start_top_n, args.end_top_n)
-                for i, qas_id in enumerate(sample.qas_id):
-                    result = RawResultExtended(qas_id=qas_id,
-                                               start_top_logits=start_top_logits[i].asnumpy(),
-                                               start_top_index=start_top_index[i].asnumpy(),
-                                               end_top_logits=end_top_logits[i].asnumpy(),
-                                               end_top_index=end_top_index[i].asnumpy(),
-                                               answerable_logits=answerable_logits[i].asnumpy())
-
-                    all_results.append(result)
-
-            # logging
-            if (batch_idx + 1) % log_interval == 0:
-                # Output the loss of per step
-                toc = time.time()
-                print(
-                    '[batch {}], Time cost={:.2f},'
-                    ' Throughput={:.2f} samples/s, ETA={:.2f}h'.format(
-                        batch_idx + 1, toc - tic, log_num / (toc - tic),
-                        (epoch_size - total_num) / (total_num / (toc - epoch_tic)) / 3600))
-                tic = time.time()
-                log_num = 0
-
-        epoch_toc = time.time()
-        print('Time cost=%2f s, Thoughput=%.2f samples/s', epoch_toc - epoch_tic,
-                     total_num / (epoch_toc - epoch_tic))
-
-        all_predictions = collections.OrderedDict()
-        all_nbest_json = collections.OrderedDict()
-        no_answer_score_json = collections.OrderedDict()
-        for index, (left_index, right_index) in enumerate(zip(dev_chunk_feature_ptr[:-1],
-                                                              dev_chunk_feature_ptr[1:])):
-            chunked_features = dev_all_chunk_features[left_index:right_index]
-            results = all_results[left_index:right_index]
-            original_feature = dev_features[index]
-            qas_ids = set([result.qas_id for result in results] +
-                          [feature.qas_id for feature in chunked_features])
-            assert len(qas_ids) == 1, 'Mismatch Occured between features and results'
-            example_qas_id = list(qas_ids)[0]
-            assert example_qas_id == original_feature.qas_id, \
-                'Mismatch Occured between original feature and chunked features'
-            not_answerable_score, best_pred, nbest_json = predict_extended(
-                original_feature=original_feature,
-                chunked_features=chunked_features,
-                results=results,
-                n_best_size=args.n_best_size,
-                max_answer_length=args.max_answer_length,
-                start_top_n=args.start_top_n,
-                end_top_n=args.end_top_n)
-            no_answer_score_json[example_qas_id] = not_answerable_score
-            all_predictions[example_qas_id] = best_pred
-            all_nbest_json[example_qas_id] = nbest_json
-
-        if args.version == '2.0':
-            exact = 'best_exact'
-            f1 = 'best_f1'
-            na_prob = no_answer_score_json
-        else:
-            exact = 'exact'
-            f1 = 'f1'
-            na_prob = None
-
-        cur_eval, revised_predictions = squad_eval(
-            dev_data_path, all_predictions, na_prob, revise=na_prob is not None)
-        print('The evaluated results are {}'.format(json.dumps(cur_eval)))
-
-        cur_metrics = 0.5 * (cur_eval[exact] + cur_eval[f1])
-        if best_eval:
-            best_metrics = 0.5 * (best_eval[exact] + best_eval[f1])
-        else:
-            best_metrics = 0.
-
-        if cur_metrics > best_metrics:
-            print('The evaluated files are saved in {}'.format(args.output_dir))
-            output_prediction_file = os.path.join(args.output_dir, 'predictions.json')
-            output_nbest_file = os.path.join(args.output_dir, 'nbest_predictions.json')
-            na_prob_file = os.path.join(args.output_dir, 'na_prob.json')
-            revised_prediction_file = os.path.join(args.output_dir, 'revised_predictions.json')
-
-            with open(output_prediction_file, 'w') as of:
-                of.write(json.dumps(all_predictions, indent=4) + '\n')
-            with open(output_nbest_file, 'w') as of:
-                of.write(json.dumps(all_nbest_json, indent=4) + '\n')
-            with open(na_prob_file, 'w') as of:
-                of.write(json.dumps(no_answer_score_json, indent=4) + '\n')
-            with open(revised_prediction_file, 'w') as of:
-                of.write(json.dumps(revised_predictions, indent=4) + '\n')
-
-            best_eval = cur_eval
-            best_eval.update({'best_ckpt': ckpt_name})
-        return best_eval
-
-    if args.param_checkpoint and args.param_checkpoint.endswith('.params'):
-        ckpt_candidates = [args.param_checkpoint]
-    else:
-        ckpt_candidates = [f for f in os.listdir(args.output_dir) if f.endswith('.params')]
-        ckpt_candidates.sort(key=lambda ele: (len(ele), ele))
-    if last:
-        ckpt_candidates = ckpt_candidates[-1:]
-
-    best_eval = {}
-    for ckpt_name in ckpt_candidates:
-        print('Starting evaluate the checkpoint {}'.format(ckpt_name))
-        ckpt_path = os.path.join(args.output_dir, ckpt_name)
-        qa_net.load_parameters(ckpt_path, ctx=ctx_l, cast_dtype=True)
-        best_eval = eval_validation(ckpt_name, best_eval)
-
-    print('The best evaluated results are {}'.format(json.dumps(best_eval)))
-    output_eval_results_file = os.path.join(args.output_dir, 'best_results.json')
-    with open(output_eval_results_file, 'w') as of:
-        of.write(json.dumps(best_eval, indent=4) + '\n')
-    return best_eval
+## Powyzsze funckje pochadza z run_script.py - END
 
 
 
@@ -766,10 +549,7 @@ def evaluateX(args, last=True):
 
 
 
-
-
-
-
+# =============== Przygotowanie modelu =============
 
 def get_model(last=True):
     args = parse_args()
@@ -803,38 +583,10 @@ def get_model(last=True):
     return qa_net
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+npx.set_np() # włączenie semantyki numpyowej - różni się od NDArray m.in., tym że pozwala na 0 shape np. (2,0,1)
+args = parse_args()
 a = get_model()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-npx.set_np() # włączenie semantyki numpyowej - różni się od NDArray m.in., tym że pozwala na 0 shape np. (2,0,1)
 
 """
 Hybrydize - samo w sobie nic nie robi od ręki - zmienia tylko pole w obiekcie, że hybrydyzacja jest aktywna.
@@ -858,56 +610,41 @@ class QuantizeHybride(HybridBlock):
         return start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits
 
 q = QuantizeHybride(a)
-
-#npx.set_np()
-q.hybridize()
-
+q.hybridize(static_alloc=True, static_shape=False)
 # pierwszy forward pass, który tworzy cached_op /\
 q.forward(np.zeros((4, 10)), np.zeros((4, 10)), np.zeros((4,)), np.zeros((4, 10)))
 mx.nd.waitall()
-# export HybridBlock do JSON'a
-q.export('model_a')
-#wczytanie JSON'a, ale nie jako HybridBlock, tylko jako Symbol
-sym, arg_params, aux_params = mx.model.load_checkpoint('model_a', 0)
-## Dwa powyższe konwertują HybridBlock -> Symbol / Symbol Group
 
-## Wizualizacja symbolu - grafu
-mx.viz.plot_network(sym)
+q.export('model_a') # export HybridBlock do JSON'a (pliki *.json i *.params)
 
+sym, arg_params, aux_params = mx.model.load_checkpoint('model_a', 0) #wczytanie JSON'a, ale nie jako HybridBlock, tylko jako Symbol
+# ## Dwa powyższe konwertują HybridBlock -> Symbol / Symbol Group
 
+# ## Wizualizacja symbolu - grafu
+# mx.viz.plot_network(sym)
 
 
 
-## Tworzenie zoptymalizowane symbolu dla danego backendu
-## optymalizacja grafu
+
+
+
+# ======================= Kwantyzacja ====================
+
+# ## Tworzenie zoptymalizowane symbolu dla danego backendu
+# ## optymalizacja grafu
 sym = sym.get_backend_symbol('MKLDNN_QUANTIZE')
-
-## Pytanie: Czym się rózni funkcja get_backend_symbol() i optimize_for()
-
-# (optional) visualize fused float32 model
-mx.viz.plot_network(sym)
-
-
-
-
-
-
-
-# quantize configs
-# set exclude layers
+mx.model.save_checkpoint('fused', 0, sym, arg_params, aux_params)
 
 from mxnet.contrib.quantization import *
 excluded_names = []
-# set calib mode.
 calib_mode = 'entropy'
-# set quantized_dtype
 quantized_dtype = 'auto'
 qsym, qarg_params, aux_params, collector = quantize_graph(sym=sym, arg_params=arg_params, aux_params=aux_params,
                                                           excluded_sym_names=excluded_names,
                                                           calib_mode=calib_mode, quantize_mode='smart',
                                                           quantized_dtype=quantized_dtype)
 # save quantized model
-mx.model.save_checkpoint('quantized-relectra', 0, qsym, qarg_params, aux_params)
+mx.model.save_checkpoint('quantized-electra', 0, qsym, qarg_params, aux_params)
 mx.viz.plot_network(qsym)
 
 
@@ -916,35 +653,32 @@ mx.viz.plot_network(qsym)
 
 
 
+# ===================== Kalibracja ===================
+def collect_calibrate(qa_model, collector):
+    qa_model.register_op_hook(collector.collect, monitor_all=True)
+    # prepare data
+    args = parse_args()
+    store, num_workers, rank, local_rank, is_master_node, ctx_l = init_comm(
+        args.comm_backend, args.gpus)
 
-args = parse_args()
-store, num_workers, rank, local_rank, is_master_node, ctx_l = init_comm(
-    args.comm_backend, args.gpus)
-
-ctx_l = parse_ctx(args.gpus)
-
-print(collector.collect)
-
-cfg, tokenizer, qa_net, use_segmentation = get_network(
-    args.model_name, ctx_l, args.classifier_dropout)
-
-qa_net.register_op_hook(collector.collect, monitor_all=True) # sym._simple_bind(ctx=cpu())
-#exe.copy_params_from(arg_params = arg_params, aux_params = aux_params)
-#exe._register_op_hook(collector.collect, monitor_all=True)
-#exe.set_monitor_callback(collector.collect, monitor_all=True)
-print(type(qa_net))
-dev_features = get_squad_features(args, tokenizer, segment='dev')
-dev_data_path = os.path.join(args.data_dir, 'dev-v{}.json'.format(args.version))
-dataset_processor = SquadDatasetProcessor(tokenizer=tokenizer,
-                                          doc_stride=args.doc_stride,
-                                          max_seq_length=args.max_seq_length,
-                                          max_query_length=args.max_query_length)
-dev_all_chunk_features = []
-dev_chunk_feature_ptr = [0]
-for feature in dev_features:
-    chunk_features = dataset_processor.process_sample(feature)
-    dev_all_chunk_features.extend(chunk_features)
-    dev_chunk_feature_ptr.append(dev_chunk_feature_ptr[-1] + len(chunk_features))
+    ctx_l = parse_ctx(args.gpus)
+    cfg, tokenizer, _, use_segmentation = get_network(
+        args.model_name, ctx_l, args.classifier_dropout)
+    # model is not required
+    dev_features = get_squad_features(args, tokenizer, segment='dev')
+    dev_data_path = os.path.join(args.data_dir, 'dev-v{}.json'.format(args.version))
+    dataset_processor = SquadDatasetProcessor(tokenizer=tokenizer,
+                                              doc_stride=args.doc_stride,
+                                              max_seq_length=args.max_seq_length,
+                                              max_query_length=args.max_query_length)
+    dev_all_chunk_features = []
+    dev_chunk_feature_ptr = [0]
+    for feature in dev_features:
+        chunk_features = dataset_processor.process_sample(feature)
+        dev_all_chunk_features.extend(chunk_features)
+        dev_chunk_feature_ptr.append(dev_chunk_feature_ptr[-1] + len(chunk_features))
+    # end prepare data
+    
 
     def eval_validation():
         """
@@ -974,28 +708,31 @@ for feature in dev_features:
                 total_num += len(tokens)
                 log_num += len(tokens)
                 segment_ids = sample.segment_ids.as_in_ctx(ctx) if use_segmentation else None
-                gt_start = sample.gt_start.as_in_ctx(ctx).astype(np.int32)
                 valid_length = sample.valid_length.as_in_ctx(ctx)
                 p_mask = sample.masks.as_in_ctx(ctx)
                 p_mask = 1 - p_mask  # In the network, we use 1 --> no_mask, 0 --> mask
-                start_logits, end_logits, answerable_logits \
-                    = qa_net(tokens, segment_ids, valid_length, p_mask, gt_start)
+                start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits \
+                    = qa_model(tokens, segment_ids, valid_length, p_mask)
+            if batch_idx == 100:
+                break
+            elif (batch_idx+1) % 10:
+                print(batch_idx)
+        return qa_model, collector
 
-eval_validation()
-
-
-
-
-
-
-
+    return eval_validation()
 
 
+q_sb = mx.gluon.SymbolBlock.imports('fused-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'fused-0000.params')
+q_sb.hybridize(static_alloc=True, static_shape=False)
 
+q_sb, collector = collect_calibrate(q_sb, collector)
 
 cqsym, cqarg_params, aux_params = calib_graph(qsym=qsym, arg_params=arg_params, aux_params=aux_params,
-                                            collector=collector, calib_mode=calib_mode,
-                                            quantized_dtype=quantized_dtype, logger=logger)
+                                             collector=collector, calib_mode=calib_mode,
+                                             quantized_dtype=quantized_dtype, logger=logger)
+
+
+cqsym = cqsym.get_backend_symbol('MKLDNN_QUANTIZE')
 mx.model.save_checkpoint('calibrated', 0, cqsym, cqarg_params, aux_params)
 
 
@@ -1007,8 +744,7 @@ mx.model.save_checkpoint('calibrated', 0, cqsym, cqarg_params, aux_params)
 
 
 
-
-
+# =================== Ewaluacja ===============
 
 def evaluate(model, last=True):
     args = parse_args()
@@ -1073,7 +809,7 @@ def evaluate(model, last=True):
 
                 start_top_logits, start_top_index, end_top_logits, end_top_index, answerable_logits \
                     = model(tokens, segment_ids, valid_length, p_mask)
-
+                mx.nd.waitall()
 
                 for i, qas_id in enumerate(sample.qas_id):
                     result = RawResultExtended(qas_id=qas_id,
@@ -1084,7 +820,8 @@ def evaluate(model, last=True):
                                                answerable_logits=answerable_logits[i].asnumpy())
 
                     all_results.append(result)
-
+            if batch_idx == 10:
+                return
             # logging
             if (batch_idx + 1) % log_interval == 0:
                 # Output the loss of per step
@@ -1096,7 +833,6 @@ def evaluate(model, last=True):
                         (epoch_size - total_num) / (total_num / (toc - epoch_tic)) / 3600))
                 tic = time.time()
                 log_num = 0
-
         epoch_toc = time.time()
         print('Time cost=%2f s, Thoughput=%.2f samples/s', epoch_toc - epoch_tic,
                      total_num / (epoch_toc - epoch_tic))
@@ -1189,64 +925,33 @@ def evaluate(model, last=True):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 import time
 from mxnet import profiler
 
-#profiler.set_config(profile_all=True, aggregate_stats=True, continuous_dump=True, filename='profile_output.json')
-print("Evaluation FP32 and quantized")
+profiler.set_config(profile_all=True, aggregate_stats=True, continuous_dump=True, filename='profile_output.json')
+# # # print("Evaluation FP32 and quantized")
 
-netxx = mx.gluon.SymbolBlock.imports('model_a-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'model_a-0000.params')
-netxx.hybridize()
-#profiler.set_state('run')
-tic = time.time()
-res = evaluate(netxx)
-#profiler.set_state('stop')
-print(res)
-#print(profiler.dumps(reset=True))
-print(time.time() - tic)
+# netxx = mx.gluon.SymbolBlock.imports('model_a-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'model_a-0000.params')
+# netxx.hybridize(static_shape=False, static_alloc=True)
+# profiler.set_state('run')
+# tic = time.time()
+# res = evaluate(netxx)
+# profiler.set_state('stop')
+# print(res)
+# print(profiler.dumps(reset=True))
+# print(time.time() - tic)
 
 
 
-quantized_net = mx.gluon.SymbolBlock.imports('calibrated-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'calibrated-0000.params')
-quantized_net.hybridize()
-#profiler.set_state('run')
+quantized_net = mx.gluon.SymbolBlock.imports('full_calib/calibrated-symbol.json', ['data0', 'data1', 'data2', 'data3'], 'full_calib/calibrated-0000.params')
+quantized_net.hybridize(static_alloc=True, static_shape=True)
+profiler.set_state('run')
 tic = time.time()
 res2 = evaluate(quantized_net)
 print(res2)
-#print(profiler.dumps(reset=True))
+print(profiler.dumps(reset=True))
 print(time.time() - tic)
 
-
-
-
-
-
-# export HybridBlock do JSON'a
-#q.export('model_a')
-#wczytanie JSON'a, ale nie jako HybridBlock, tylko jako Symbol
-#sym, arg_params, aux_params = mx.model.load_checkpoint('model_a', 0)
-## Dwa powyższe konwertują HybridBlock -> Symbol / Symbol Group
-
-## Wizualizacja symbolu - grafu
-#mx.viz.plot_network(sym)
-
-
-
-#jeśli podano backend,
-#dokonywana jest optymalizacja za pomocą funkcji optimize_for (woła MXOptimizeForBackend w C Api) <- Prawdopodobnie
-#jest to Subgraph API, o którym wspomniał Xinyu w swojej prezentacji.
 
 
 # In MXNet 2.0 there is function optimize_for which takes backend as an argument and is partitioning a graph
@@ -1270,39 +975,3 @@ print(time.time() - tic)
 # Currently SQuAD models have two functions: first is hybrid_forward and second is
 # inference. In inference function gluon is using mx.npx.topk functions which requires input
 # to be NDArray not a symbol
-
-
-
-
-# OrderedDict([('exact', 2.8131053651141245),
-#              ('f1', 6.355635449414382),
-#              ('total', 11873),
-#              ('HasAns_exact', 0.16869095816464239),
-#              ('HasAns_f1', 7.263910204267407),
-#              ('HasAns_total', 5928),
-#              ('NoAns_exact', 5.44995794785534),
-#              ('NoAns_f1', 5.44995794785534),
-#              ('NoAns_total', 5945),
-#              ('best_exact', 50.07159100480081),
-#              ('best_exact_thresh', 0.0),
-#              ('best_f1', 50.07159100480081),
-#              ('best_f1_thresh', 0.0),
-#              ('best_ckpt', 'xd')])
-
-
-
-#Quantized - probably slower
-# OrderedDict([('exact', 2.720458182430725),
-#              ('f1', 6.360712410172853),
-#              ('total', 11873),
-#              ('HasAns_exact', 0.10121457489878542),
-#              ('HasAns_f1', 7.392162355935003),
-#              ('HasAns_total', 5928),
-#              ('NoAns_exact', 5.332211942809083),
-#              ('NoAns_f1', 5.332211942809083),
-#              ('NoAns_total', 5945),
-#              ('best_exact', 50.07159100480081),
-#              ('best_exact_thresh', 0.0),
-#              ('best_f1', 50.07159100480081),
-#              ('best_f1_thresh', 0.0),
-#              ('best_ckpt', 'xd')])

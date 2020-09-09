@@ -1,0 +1,496 @@
+
+### MODEL NIEKWANTYZOWANY ###
+[batch 10], Time cost=16.49, Throughput=9.70 samples/s, ETA=0.34h
+[batch 20], Time cost=10.57, Throughput=15.13 samples/s, ETA=0.27h
+[batch 30], Time cost=11.19, Throughput=14.30 samples/s, ETA=0.25h
+[batch 40], Time cost=11.31, Throughput=14.15 samples/s, ETA=0.24h
+[batch 50], Time cost=11.58, Throughput=13.81 samples/s, ETA=0.24h
+[batch 60], Time cost=8.40, Throughput=19.04 samples/s, ETA=0.22h
+[batch 70], Time cost=12.36, Throughput=12.94 samples/s, ETA=0.22h
+[batch 80], Time cost=11.01, Throughput=14.53 samples/s, ETA=0.21h
+[batch 90], Time cost=12.10, Throughput=13.22 samples/s, ETA=0.21h
+[batch 100], Time cost=11.53, Throughput=13.88 samples/s, ETA=0.21h
+[batch 110], Time cost=14.75, Throughput=10.84 samples/s, ETA=0.21h
+[batch 120], Time cost=14.16, Throughput=11.30 samples/s, ETA=0.21h
+[batch 130], Time cost=10.82, Throughput=14.79 samples/s, ETA=0.20h
+[batch 140], Time cost=13.92, Throughput=11.49 samples/s, ETA=0.20h
+[batch 150], Time cost=11.24, Throughput=14.24 samples/s, ETA=0.20h
+[batch 160], Time cost=8.82, Throughput=18.14 samples/s, ETA=0.19h
+[batch 170], Time cost=8.31, Throughput=19.25 samples/s, ETA=0.19h
+[batch 180], Time cost=8.73, Throughput=18.33 samples/s, ETA=0.18h
+[batch 190], Time cost=11.61, Throughput=13.78 samples/s, ETA=0.18h
+[batch 200], Time cost=20.71, Throughput=7.73 samples/s, ETA=0.18h
+[batch 210], Time cost=18.05, Throughput=8.86 samples/s, ETA=0.18h
+[batch 220], Time cost=22.81, Throughput=7.01 samples/s, ETA=0.18h
+[batch 230], Time cost=7.89, Throughput=20.27 samples/s, ETA=0.18h
+[batch 240], Time cost=9.02, Throughput=17.73 samples/s, ETA=0.17h
+[batch 250], Time cost=10.78, Throughput=14.85 samples/s, ETA=0.17h
+[batch 260], Time cost=10.95, Throughput=14.61 samples/s, ETA=0.16h
+[batch 270], Time cost=12.54, Throughput=12.76 samples/s, ETA=0.16h
+[batch 280], Time cost=6.77, Throughput=23.65 samples/s, ETA=0.16h
+[batch 290], Time cost=15.39, Throughput=10.40 samples/s, ETA=0.15h
+[batch 300], Time cost=8.24, Throughput=19.41 samples/s, ETA=0.15h
+[batch 310], Time cost=11.29, Throughput=14.17 samples/s, ETA=0.14h
+[batch 320], Time cost=8.55, Throughput=18.71 samples/s, ETA=0.14h
+[batch 330], Time cost=9.55, Throughput=16.76 samples/s, ETA=0.14h
+[batch 340], Time cost=14.28, Throughput=11.20 samples/s, ETA=0.13h
+[batch 350], Time cost=8.51, Throughput=18.80 samples/s, ETA=0.13h
+[batch 360], Time cost=9.40, Throughput=17.02 samples/s, ETA=0.12h
+[batch 370], Time cost=11.85, Throughput=13.50 samples/s, ETA=0.12h
+[batch 380], Time cost=7.31, Throughput=21.88 samples/s, ETA=0.12h
+[batch 390], Time cost=8.19, Throughput=19.53 samples/s, ETA=0.11h
+[batch 400], Time cost=8.55, Throughput=18.70 samples/s, ETA=0.11h
+[batch 410], Time cost=8.98, Throughput=17.82 samples/s, ETA=0.11h
+[batch 420], Time cost=10.59, Throughput=15.11 samples/s, ETA=0.10h
+[batch 430], Time cost=12.57, Throughput=12.73 samples/s, ETA=0.10h
+[batch 440], Time cost=9.01, Throughput=17.75 samples/s, ETA=0.10h
+[batch 450], Time cost=8.84, Throughput=18.10 samples/s, ETA=0.09h
+[batch 460], Time cost=8.03, Throughput=19.93 samples/s, ETA=0.09h
+[batch 470], Time cost=10.75, Throughput=14.88 samples/s, ETA=0.08h
+[batch 480], Time cost=8.87, Throughput=18.03 samples/s, ETA=0.08h
+[batch 490], Time cost=11.03, Throughput=14.50 samples/s, ETA=0.08h
+[batch 500], Time cost=13.87, Throughput=11.54 samples/s, ETA=0.08h
+[batch 510], Time cost=11.72, Throughput=13.66 samples/s, ETA=0.07h
+[batch 520], Time cost=8.97, Throughput=17.83 samples/s, ETA=0.07h
+[batch 530], Time cost=8.71, Throughput=18.37 samples/s, ETA=0.07h
+[batch 540], Time cost=10.97, Throughput=14.59 samples/s, ETA=0.06h
+[batch 550], Time cost=8.79, Throughput=18.21 samples/s, ETA=0.06h
+[batch 560], Time cost=8.74, Throughput=18.30 samples/s, ETA=0.06h
+[batch 570], Time cost=9.02, Throughput=17.73 samples/s, ETA=0.05h
+[batch 580], Time cost=7.92, Throughput=20.21 samples/s, ETA=0.05h
+[batch 590], Time cost=9.07, Throughput=17.63 samples/s, ETA=0.05h
+[batch 600], Time cost=8.39, Throughput=19.07 samples/s, ETA=0.04h
+[batch 610], Time cost=8.13, Throughput=19.67 samples/s, ETA=0.04h
+[batch 620], Time cost=7.91, Throughput=20.22 samples/s, ETA=0.04h
+[batch 630], Time cost=8.93, Throughput=17.91 samples/s, ETA=0.03h
+[batch 640], Time cost=7.03, Throughput=22.77 samples/s, ETA=0.03h
+[batch 650], Time cost=8.64, Throughput=18.52 samples/s, ETA=0.03h
+[batch 660], Time cost=10.24, Throughput=15.63 samples/s, ETA=0.02h
+[batch 670], Time cost=11.13, Throughput=14.38 samples/s, ETA=0.02h
+[batch 680], Time cost=10.75, Throughput=14.88 samples/s, ETA=0.02h
+[batch 690], Time cost=10.77, Throughput=14.86 samples/s, ETA=0.02h
+[batch 700], Time cost=8.51, Throughput=18.81 samples/s, ETA=0.01h
+[batch 710], Time cost=7.85, Throughput=20.39 samples/s, ETA=0.01h
+[batch 720], Time cost=9.09, Throughput=17.60 samples/s, ETA=0.01h
+[batch 730], Time cost=9.33, Throughput=17.15 samples/s, ETA=0.00h
+[batch 740], Time cost=11.63, Throughput=13.75 samples/s, ETA=0.00h
+[batch 750], Time cost=9.04, Throughput=17.71 samples/s, ETA=-0.00h
+Time cost=%2f s, Thoughput=%.2f samples/s 794.5797715187073 15.130010139852848
+The evaluated results are {"exact": 44.68963193801061, "f1": 47.46428824243674, "total": 11873, "HasAns_exact": 89.0519568151147, "HasAns_f1": 94.60922643428665, "HasAns_total": 5928, "NoAns_exact": 0.4541631623212784, "NoAns_f1": 0.4541631623212784, "NoAns_total": 5945, "best_exact": 88.40225722226901, "best_exact_thresh": -1.6532028913497925, "best_f1": 90.88002366395989, "best_f1_thresh": -1.6532028913497925}
+The evaluated files are saved in .
+The best evaluated results are {"exact": 44.68963193801061, "f1": 47.46428824243674, "total": 11873, "HasAns_exact": 89.0519568151147, "HasAns_f1": 94.60922643428665, "HasAns_total": 5928, "NoAns_exact": 0.4541631623212784, "NoAns_f1": 0.4541631623212784, "NoAns_total": 5945, "best_exact": 88.40225722226901, "best_exact_thresh": -1.6532028913497925, "best_f1": 90.88002366395989, "best_f1_thresh": -1.6532028913497925, "best_ckpt": "fintune_google_electra_large_squad_2.0/google_electra_large_squad2.0_8159.params"}
+OrderedDict([('exact', 44.68963193801061), ('f1', 47.46428824243674), ('total', 11873), ('HasAns_exact', 89.0519568151147), ('HasAns_f1', 94.60922643428665), ('HasAns_total', 5928), ('NoAns_exact', 0.4541631623212784), ('NoAns_f1', 0.4541631623212784), ('NoAns_total', 5945), ('best_exact', 88.40225722226901), ('best_exact_thresh', -1.6532028913497925), ('best_f1', 90.88002366395989), ('best_f1_thresh', -1.6532028913497925), ('best_ckpt', 'fintune_google_electra_large_squad_2.0/google_electra_large_squad2.0_8159.params')])
+1058.7085273265839
+
+
+
+
+
+
+
+
+### MODEL KWANTYZOWANY ###
+[batch 10], Time cost=9.19, Throughput=17.41 samples/s, ETA=0.19h
+[batch 20], Time cost=5.63, Throughput=28.40 samples/s, ETA=0.15h
+[batch 30], Time cost=6.31, Throughput=25.36 samples/s, ETA=0.14h
+[batch 40], Time cost=6.21, Throughput=25.78 samples/s, ETA=0.13h
+[batch 50], Time cost=6.58, Throughput=24.33 samples/s, ETA=0.13h
+[batch 60], Time cost=4.74, Throughput=33.73 samples/s, ETA=0.12h
+[batch 70], Time cost=6.72, Throughput=23.82 samples/s, ETA=0.12h
+[batch 80], Time cost=6.03, Throughput=26.55 samples/s, ETA=0.12h
+[batch 90], Time cost=6.46, Throughput=24.76 samples/s, ETA=0.12h
+[batch 100], Time cost=6.15, Throughput=26.04 samples/s, ETA=0.11h
+[batch 110], Time cost=7.85, Throughput=20.38 samples/s, ETA=0.11h
+[batch 120], Time cost=7.60, Throughput=21.04 samples/s, ETA=0.11h
+[batch 130], Time cost=5.96, Throughput=26.85 samples/s, ETA=0.11h
+[batch 140], Time cost=7.43, Throughput=21.54 samples/s, ETA=0.11h
+[batch 150], Time cost=6.55, Throughput=24.44 samples/s, ETA=0.11h
+[batch 160], Time cost=6.74, Throughput=23.76 samples/s, ETA=0.11h
+[batch 170], Time cost=6.62, Throughput=24.18 samples/s, ETA=0.11h
+[batch 180], Time cost=6.66, Throughput=24.03 samples/s, ETA=0.10h
+[batch 190], Time cost=9.34, Throughput=17.13 samples/s, ETA=0.10h
+[batch 200], Time cost=17.03, Throughput=9.39 samples/s, ETA=0.11h
+[batch 210], Time cost=14.71, Throughput=10.88 samples/s, ETA=0.11h
+[batch 220], Time cost=18.48, Throughput=8.66 samples/s, ETA=0.12h
+[batch 230], Time cost=5.95, Throughput=26.89 samples/s, ETA=0.11h
+[batch 240], Time cost=6.52, Throughput=24.54 samples/s, ETA=0.11h
+[batch 250], Time cost=7.94, Throughput=20.15 samples/s, ETA=0.11h
+[batch 260], Time cost=8.53, Throughput=18.76 samples/s, ETA=0.11h
+[batch 270], Time cost=9.95, Throughput=16.09 samples/s, ETA=0.11h
+[batch 280], Time cost=5.10, Throughput=31.36 samples/s, ETA=0.10h
+[batch 290], Time cost=12.55, Throughput=12.74 samples/s, ETA=0.10h
+[batch 300], Time cost=6.30, Throughput=25.40 samples/s, ETA=0.10h
+[batch 310], Time cost=8.58, Throughput=18.64 samples/s, ETA=0.10h
+[batch 320], Time cost=6.59, Throughput=24.30 samples/s, ETA=0.09h
+[batch 330], Time cost=7.19, Throughput=22.25 samples/s, ETA=0.09h
+[batch 340], Time cost=11.44, Throughput=13.99 samples/s, ETA=0.09h
+[batch 350], Time cost=6.46, Throughput=24.77 samples/s, ETA=0.09h
+[batch 360], Time cost=7.09, Throughput=22.56 samples/s, ETA=0.09h
+[batch 370], Time cost=8.94, Throughput=17.91 samples/s, ETA=0.08h
+[batch 380], Time cost=5.49, Throughput=29.15 samples/s, ETA=0.08h
+[batch 390], Time cost=6.14, Throughput=26.07 samples/s, ETA=0.08h
+[batch 400], Time cost=6.64, Throughput=24.10 samples/s, ETA=0.08h
+[batch 410], Time cost=6.76, Throughput=23.68 samples/s, ETA=0.07h
+[batch 420], Time cost=7.91, Throughput=20.23 samples/s, ETA=0.07h
+[batch 430], Time cost=9.87, Throughput=16.21 samples/s, ETA=0.07h
+[batch 440], Time cost=6.81, Throughput=23.48 samples/s, ETA=0.07h
+[batch 450], Time cost=6.78, Throughput=23.61 samples/s, ETA=0.06h
+[batch 460], Time cost=6.08, Throughput=26.34 samples/s, ETA=0.06h
+[batch 470], Time cost=8.25, Throughput=19.39 samples/s, ETA=0.06h
+[batch 480], Time cost=6.94, Throughput=23.05 samples/s, ETA=0.06h
+[batch 490], Time cost=8.35, Throughput=19.17 samples/s, ETA=0.05h
+[batch 500], Time cost=10.77, Throughput=14.86 samples/s, ETA=0.05h
+[batch 510], Time cost=9.09, Throughput=17.60 samples/s, ETA=0.05h
+[batch 520], Time cost=6.83, Throughput=23.41 samples/s, ETA=0.05h
+[batch 530], Time cost=6.64, Throughput=24.11 samples/s, ETA=0.05h
+[batch 540], Time cost=8.44, Throughput=18.96 samples/s, ETA=0.04h
+[batch 550], Time cost=6.70, Throughput=23.87 samples/s, ETA=0.04h
+[batch 560], Time cost=6.72, Throughput=23.81 samples/s, ETA=0.04h
+[batch 570], Time cost=7.12, Throughput=22.46 samples/s, ETA=0.04h
+[batch 580], Time cost=6.03, Throughput=26.55 samples/s, ETA=0.04h
+[batch 590], Time cost=7.17, Throughput=22.32 samples/s, ETA=0.03h
+[batch 600], Time cost=6.61, Throughput=24.22 samples/s, ETA=0.03h
+[batch 610], Time cost=6.39, Throughput=25.02 samples/s, ETA=0.03h
+[batch 620], Time cost=6.16, Throughput=25.97 samples/s, ETA=0.03h
+[batch 630], Time cost=6.80, Throughput=23.53 samples/s, ETA=0.02h
+[batch 640], Time cost=5.26, Throughput=30.39 samples/s, ETA=0.02h
+[batch 650], Time cost=6.75, Throughput=23.69 samples/s, ETA=0.02h
+[batch 660], Time cost=7.87, Throughput=20.33 samples/s, ETA=0.02h
+[batch 670], Time cost=8.89, Throughput=18.00 samples/s, ETA=0.02h
+[batch 680], Time cost=8.06, Throughput=19.84 samples/s, ETA=0.01h
+[batch 690], Time cost=8.31, Throughput=19.25 samples/s, ETA=0.01h
+[batch 700], Time cost=6.41, Throughput=24.96 samples/s, ETA=0.01h
+[batch 710], Time cost=6.02, Throughput=26.57 samples/s, ETA=0.01h
+[batch 720], Time cost=6.98, Throughput=22.92 samples/s, ETA=0.00h
+[batch 730], Time cost=7.15, Throughput=22.38 samples/s, ETA=0.00h
+[batch 740], Time cost=8.93, Throughput=17.92 samples/s, ETA=0.00h
+[batch 750], Time cost=6.88, Throughput=23.25 samples/s, ETA=-0.00h
+Time cost=%2f s, Thoughput=%.2f samples/s 574.039219379425 20.94281992264673
+The evaluated results are {"exact": 45.32131727448834, "f1": 48.867900371831794, "total": 11873, "HasAns_exact": 85.00337381916329, "HasAns_f1": 92.10671071436548, "HasAns_total": 5928, "NoAns_exact": 5.752733389402859, "NoAns_f1": 5.752733389402859, "NoAns_total": 5945, "best_exact": 83.66040596310958, "best_exact_thresh": -1.6978851556777954, "best_f1": 86.81298089573242, "best_f1_thresh": -1.6094681024551392}
+The evaluated files are saved in .
+The best evaluated results are {"exact": 45.32131727448834, "f1": 48.867900371831794, "total": 11873, "HasAns_exact": 85.00337381916329, "HasAns_f1": 92.10671071436548, "HasAns_total": 5928, "NoAns_exact": 5.752733389402859, "NoAns_f1": 5.752733389402859, "NoAns_total": 5945, "best_exact": 83.66040596310958, "best_exact_thresh": -1.6978851556777954, "best_f1": 86.81298089573242, "best_f1_thresh": -1.6094681024551392, "best_ckpt": "fintune_google_electra_large_squad_2.0/google_electra_large_squad2.0_8159.params"}
+OrderedDict([('exact', 45.32131727448834), ('f1', 48.867900371831794), ('total', 11873), ('HasAns_exact', 85.00337381916329), ('HasAns_f1', 92.10671071436548), ('HasAns_total', 5928), ('NoAns_exact', 5.752733389402859), ('NoAns_f1', 5.752733389402859), ('NoAns_total', 5945), ('best_exact', 83.66040596310958), ('best_exact_thresh', -1.6978851556777954), ('best_f1', 86.81298089573242), ('best_f1_thresh', -1.6094681024551392), ('best_ckpt', 'fintune_google_electra_large_squad_2.0/google_electra_large_squad2.0_8159.params')])
+848.8038032054901
+
+
+
+
+
+
+Najwazniejsza prawdopodobnie
+"best_exact": 88.40225722226901, "best_f1": 90.88002366395989
+vs.
+"best_exact": 83.66040596310958, "best_f1": 86.81298089573242 (kwantyzacja)
+
+
+Czas wykonania:
+15.130010139852848 probek na sekunde
+794.5797715187073 sekund
+vs
+20.94281992264673 probek na sekunde
+574.039219379425 sekund (kwantyzacja)
+
+
+
+
+
+
+
+
+
+############### PROFILER Z 11 BATCHY
+### Zwykly model
+
+Device Storage
+=================
+Name                          Total Count    Min Use  (kB)    Max Use  (kB)    Avg Use  (kB)
+----                          -----------    -------------    -------------    -------------
+Memory: cpu/0                       75114           0.0000     4764003.5000     2382001.7500
+
+MXNET_C_API
+=================
+Name                          Total Count        Time (ms)    Min Time (ms)    Max Time (ms)    Avg Time (ms)
+----                          -----------        ---------    -------------    -------------    -------------
+MXNDArrayWaitAll                       11       17402.1426         737.8730        2653.4709        1582.0129
+MXNet C API Calls                  570037         570.0370           0.0010         570.0370         285.0180
+MXNDArrayLoad                           1         508.3410         508.3410         508.3410         508.3410
+MXNDArraySyncCopyFromCPU            36176         499.5030           0.0070           0.0980           0.0138
+MXNDArrayFree                       38059         197.8840           0.0000           1.4310           0.0052
+MXNDArrayCreate                     36481         193.6200           0.0010           0.1490           0.0053
+MXInvokeCachedOp                       11         161.0150           9.3090          27.2300          14.6377
+MXNDArrayGetShape                  390236         133.0650           0.0000           0.0170           0.0003
+MXCreateCachedOp                        1          17.3230          17.3230          17.3230          17.3230
+MXNDArrayGetDType                   39142           7.4220           0.0000           0.0110           0.0002
+MXNetFuncCall                        1030           6.8070           0.0000           0.0850           0.0066
+MXImperativeInvoke                    327           6.4310           0.0090           0.3080           0.0197
+MXSetIsNumpyShape                   17007           4.0930           0.0000           0.0050           0.0002
+MXNDArraySetDeferredComputeVariable            3660           3.5950           0.0000           0.0080           0.0010
+MXAutogradMarkVariables               305           2.3870           0.0020           0.7090           0.0078
+MXNDArraySyncCopyToCPU               1408           2.3540           0.0010           0.0190           0.0017
+MXSymbolSetAttr                      1525           2.1210           0.0000           0.0090           0.0014
+MXNDArrayAt                           880           1.3310           0.0010           0.0130           0.0015
+MXIsNumpyShape                       1221           0.2420           0.0000           0.0010           0.0002
+MXNetObjectFree                       714           0.1970           0.0000           0.0090           0.0003
+MXNetObjectGetTypeIndex               714           0.1240           0.0000           0.0010           0.0002
+MXShallowCopySymbol                   305           0.0980           0.0000           0.0020           0.0003
+MXNDArrayGetContext                   393           0.0960           0.0000           0.0010           0.0002
+MXNDArrayGetStorageType               305           0.0660           0.0000           0.0010           0.0002
+MXIsNumpyDefaultDtype                 110           0.0320           0.0000           0.0010           0.0003
+MXKVStoreFree                           1           0.0130           0.0130           0.0130           0.0130
+MXKVStoreCreate                         1           0.0080           0.0080           0.0080           0.0080
+MXNDArrayIsDeferredCompute              11           0.0060           0.0000           0.0010           0.0005
+MXNet C API Concurrency           1140074           0.0000           0.0000           0.0010           0.0000
+MXKVStoreGetRank                        1           0.0000           0.0000           0.0000           0.0000
+MXKVStoreGetGroupSize                   1           0.0000           0.0000           0.0000           0.0000
+
+operator
+=================
+Name                          Total Count        Time (ms)    Min Time (ms)    Max Time (ms)    Avg Time (ms)
+----                          -----------        ---------    -------------    -------------    -------------
+FullyConnected                       1122        9555.3906           0.0320          36.4990           8.5164
+_npi_where_rscalar                    319        3210.0940           0.0130          27.0180          10.0630
+_split_v2                             264        1818.7450           3.5000          12.1200           6.8892
+batch_dot                             539         832.0780           0.1690          13.6120           1.5437
+_npi_multiply                         286         429.1580           0.0130           3.4650           1.5006
+SwapAxis                              792         338.6800           0.1660           0.8180           0.4276
+_npi_true_divide_scalar               264         262.5430           0.2140           2.4570           0.9945
+softmax                               275         204.5220           0.0460           2.1150           0.7437
+_npi_transpose                        264         140.2580           0.2690           0.8340           0.5313
+LeakyReLU                             264         140.1900           0.2650           1.0190           0.5310
+_npi_concatenate                       22         128.5000           0.0310          19.1750           5.8409
+_npi_add                              561         124.9360           0.0120           0.3800           0.2227
+LayerNorm                             550         115.3050           0.1080           0.9970           0.2096
+WaitForVar                          36136          95.9280           0.0010           0.0400           0.0027
+CopyCPU2CPU                           305          89.4460           0.0030           4.6400           0.2933
+broadcast_like                         22          74.4280           1.2360           6.1790           3.3831
+DeleteVariable                      38894          58.9460           0.0000           1.4230           0.0015
+_npi_zeros                            305          56.3550           0.0020           1.8610           0.1848
+Cast                                   66          13.5150           0.0030           2.6640           0.2048
+Embedding                              22           8.6240           0.2000           1.4170           0.3920
+Dropout                               814           8.6200           0.0040           0.0290           0.0106
+Activation                             22           8.4950           0.0220           1.1190           0.3861
+_npx_reshape                         1100           5.1130           0.0020           0.0240           0.0046
+log_softmax                            33           4.7130           0.0240           0.2790           0.1428
+ResourceParallelRandomSetSeed               1           3.9500           3.9500           3.9500           3.9500
+expand_dims                           330           3.3860           0.0030           0.1020           0.0103
+_npi_copy                             264           2.5530           0.0060           0.0260           0.0097
+SequenceMask                           11           2.4220           0.1020           0.3780           0.2202
+topk                                   22           1.6250           0.0530           0.1670           0.0739
+_npi_squeeze                           44           0.8960           0.0050           0.0470           0.0204
+gather_nd                              11           0.4880           0.0330           0.1060           0.0444
+_contrib_arange_like                   33           0.4810           0.0080           0.0830           0.0146
+take                                   11           0.4700           0.0220           0.0740           0.0427
+_npi_less                              22           0.4210           0.0140           0.0460           0.0191
+slice                                  11           0.3530           0.0240           0.0620           0.0321
+_npi_stack                             11           0.2320           0.0160           0.0580           0.0211
+_npi_rsubtract_scalar                  11           0.1880           0.0110           0.0410           0.0171
+_npi_full_like                         11           0.0830           0.0060           0.0130           0.0075
+
+
+
+
+
+
+
+
+
+
+#### Skwantyzowany model
+
+
+Device Storage
+=================
+Name                          Total Count    Min Use  (kB)    Max Use  (kB)    Avg Use  (kB)
+----                          -----------    -------------    -------------    -------------
+Memory: cpu/0                       76594       12582.9121     3859512.7500     1923465.0000
+
+MXNET_C_API
+=================
+Name                          Total Count        Time (ms)    Min Time (ms)    Max Time (ms)    Avg Time (ms)
+----                          -----------        ---------    -------------    -------------    -------------
+MXNDArrayWaitAll                       11        9887.6963         382.6330        1775.5959         898.8815
+MXNDArraySyncCopyFromCPU            36176         764.1390           0.0110           0.1050           0.0211
+MXNet C API Calls                  577310         577.3100           0.0010         577.3100         288.6540
+MXNDArrayLoad                           1         512.0600         512.0600         512.0600         512.0600
+MXInvokeCachedOp                       11         308.6810          25.7240          33.3050          28.0619
+MXNDArrayFree                       38059         274.2320           0.0000           1.7440           0.0072
+MXNDArrayCreate                     36481         239.8480           0.0020           0.0240           0.0066
+MXNDArrayGetShape                  390236         200.4620           0.0000           0.0170           0.0005
+MXCreateCachedOp                        1          20.3760          20.3760          20.3760          20.3760
+MXNDArraySetDeferredComputeVariable            8508          11.9390           0.0000           0.0110           0.0014
+MXImperativeInvoke                    327           9.4480           0.0120           0.7230           0.0289
+MXNetFuncCall                        1030           9.3090           0.0000           0.8110           0.0090
+MXNDArrayGetDType                   39142           7.9180           0.0000           0.0060           0.0002
+MXSymbolSetAttr                      3545           4.3290           0.0000           0.0110           0.0012
+MXSetIsNumpyShape                   17007           4.2480           0.0000           0.0060           0.0002
+MXNDArraySyncCopyToCPU               1408           3.6180           0.0010           0.0200           0.0026
+MXAutogradMarkVariables               305           2.9760           0.0030           0.5470           0.0098
+MXNDArrayAt                           880           2.0410           0.0020           0.0110           0.0023
+MXIsNumpyShape                       1221           0.3180           0.0000           0.0090           0.0003
+MXShallowCopySymbol                   709           0.2480           0.0000           0.0020           0.0003
+MXNetObjectFree                       714           0.2130           0.0000           0.0010           0.0003
+MXNetObjectGetTypeIndex               714           0.1430           0.0000           0.0010           0.0002
+MXNDArrayGetContext                   393           0.1110           0.0000           0.0010           0.0003
+MXNDArrayGetStorageType               305           0.0790           0.0000           0.0080           0.0003
+MXIsNumpyDefaultDtype                 110           0.0350           0.0000           0.0010           0.0003
+MXKVStoreFree                           1           0.0130           0.0130           0.0130           0.0130
+MXKVStoreCreate                         1           0.0080           0.0080           0.0080           0.0080
+MXNDArrayIsDeferredCompute              11           0.0040           0.0000           0.0010           0.0004
+MXNet C API Concurrency           1154619           0.0010           0.0000           0.0010           0.0000
+MXKVStoreGetRank                        1           0.0010           0.0010           0.0010           0.0010
+MXKVStoreGetGroupSize                   1           0.0010           0.0010           0.0010           0.0010
+
+operator
+=================
+Name                          Total Count        Time (ms)    Min Time (ms)    Max Time (ms)    Avg Time (ms)
+----                          -----------        ---------    -------------    -------------    -------------
+_sg_mkldnn_fully_connected            1122        2697.7141           0.1340          16.1080           2.4044
+_npi_where_rscalar                    319        2482.7129           0.0120          26.8110           7.7828
+_split_v2                             264        1550.7540           2.8940          11.4930           5.8741
+_contrib_quantize_v2                 1111         787.3240           0.1100           4.0410           0.7087
+batch_dot                             539         777.3760           0.1260           8.2750           1.4423
+SwapAxis                              792         328.5360           0.1860           0.8220           0.4148
+_npi_multiply                         286         312.3980           0.0140           3.6160           1.0923
+_npi_true_divide_scalar               264         266.7720           0.2290           2.6720           1.0105
+softmax                               275         178.1040           0.0250           2.3460           0.6477
+_npi_transpose                        264         123.3400           0.2320           0.8450           0.4672
+WaitForVar                          36143         119.5150           0.0020           0.0370           0.0033
+LayerNorm                             550         108.4970           0.1020           1.0400           0.1973
+_npi_add                              561         105.3990           0.0130           0.3590           0.1879
+_npi_concatenate                       22         102.3690           0.0280          18.3740           4.6531
+LeakyReLU                             264          97.5120           0.1570           0.9660           0.3694
+CopyCPU2CPU                           305          92.0610           0.0040           4.8340           0.3018
+DeleteVariable                      41729          81.0970           0.0000           1.7310           0.0019
+broadcast_like                         22          60.8490           0.8040           6.0730           2.7659
+_npi_zeros                            305          58.2600           0.0030           2.1810           0.1910
+Cast                                   66          11.6710           0.0030           1.9480           0.1768
+Activation                             22           8.2900           0.0260           1.1270           0.3768
+Embedding                              22           7.6840           0.1460           1.2160           0.3493
+Dropout                               814           6.8890           0.0040           0.0240           0.0085
+log_softmax                            33           4.9030           0.0240           0.2740           0.1486
+expand_dims                           330           3.8990           0.0030           0.2070           0.0118
+_npx_reshape                         1100           3.7640           0.0010           0.0300           0.0034
+ResourceParallelRandomSetSeed               1           3.4830           3.4830           3.4830           3.4830
+SequenceMask                           11           1.9760           0.0800           0.3020           0.1796
+_npi_copy                             264           1.7500           0.0040           0.0170           0.0066
+topk                                   22           1.4510           0.0500           0.1210           0.0660
+_npi_squeeze                           44           1.0140           0.0060           0.0620           0.0230
+gather_nd                              11           0.4850           0.0310           0.1400           0.0441
+_npi_less                              22           0.4000           0.0110           0.0640           0.0182
+take                                   11           0.3890           0.0210           0.0690           0.0354
+slice                                  11           0.3840           0.0250           0.0640           0.0349
+_contrib_arange_like                   33           0.3620           0.0080           0.0380           0.0110
+_npi_stack                             11           0.2220           0.0160           0.0450           0.0202
+_npi_rsubtract_scalar                  11           0.1650           0.0090           0.0380           0.0150
+_npi_full_like                         11           0.0770           0.0060           0.0130           0.0070
+
+
+
+
+Prawdobodbnie warto przyspieszyc:
+
+_npi_where_rscalar                    319        2482.7129           0.0120          26.8110           7.7828
+_split_v2                             264        1550.7540           2.8940          11.4930           5.8741
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Profile Statistics:
+        Note the difference in units for different entries.
+Device Storage
+=================
+Name                          Total Count    Min Use  (kB)    Max Use  (kB)    Avg Use  (kB)
+----                          -----------    -------------    -------------    -------------
+Memory: cpu/0                       76589       12582.9121     3859307.7500     1923362.5000
+
+MXNET_C_API
+=================
+Name                          Total Count        Time (ms)    Min Time (ms)    Max Time (ms)    Avg Time (ms)
+----                          -----------        ---------    -------------    -------------    -------------
+MXNDArrayWaitAll                       11       11797.2100         500.1770        1885.1219        1072.4736
+MXNDArraySyncCopyFromCPU            36176         766.1390           0.0120           0.0970           0.0212
+MXNet C API Calls                  577310         577.3100           0.0010         577.3100         288.6540
+MXNDArrayLoad                           1         501.8510         501.8510         501.8510         501.8510
+MXInvokeCachedOp                       11         252.3080          21.8560          28.3720          22.9371
+MXNDArrayCreate                     36481         232.8910           0.0020           0.6740           0.0064
+MXNDArrayGetShape                  390236         196.0560           0.0000           0.0130           0.0005
+MXNDArrayFree                       38059         184.8610           0.0000           1.4970           0.0049
+MXCreateCachedOp                        1          20.3120          20.3120          20.3120          20.3120
+MXNetFuncCall                        1030           9.0270           0.0000           0.4080           0.0088
+MXNDArraySetDeferredComputeVariable            8508           7.5560           0.0000           0.0080           0.0009
+MXNDArrayGetDType                   39142           7.2280           0.0000           0.0100           0.0002
+MXImperativeInvoke                    327           7.1550           0.0110           0.0970           0.0219
+MXSymbolSetAttr                      3545           4.4060           0.0000           0.0080           0.0012
+MXSetIsNumpyShape                   17007           3.8650           0.0000           0.0040           0.0002
+MXAutogradMarkVariables               305           1.9240           0.0030           0.0650           0.0063
+MXNDArraySyncCopyToCPU               1408           1.9170           0.0010           0.0140           0.0014
+MXNDArrayAt                           880           1.0140           0.0000           0.0090           0.0012
+MXIsNumpyShape                       1221           0.2930           0.0000           0.0100           0.0002
+MXNetObjectFree                       714           0.2210           0.0000           0.0010           0.0003
+MXShallowCopySymbol                   709           0.2020           0.0000           0.0020           0.0003
+MXNetObjectGetTypeIndex               714           0.1570           0.0000           0.0010           0.0002
+MXNDArrayGetContext                   393           0.0960           0.0000           0.0010           0.0002
+MXNDArrayGetStorageType               305           0.0620           0.0000           0.0010           0.0002
+MXIsNumpyDefaultDtype                 110           0.0270           0.0000           0.0010           0.0002
+MXKVStoreFree                           1           0.0110           0.0110           0.0110           0.0110
+MXKVStoreCreate                         1           0.0080           0.0080           0.0080           0.0080
+MXNDArrayIsDeferredCompute              11           0.0020           0.0000           0.0010           0.0002
+MXNet C API Concurrency           1154619           0.0010           0.0000           0.0010           0.0000
+MXKVStoreGetRank                        1           0.0000           0.0000           0.0000           0.0000
+MXKVStoreGetGroupSize                   1           0.0000           0.0000           0.0000           0.0000
+
+operator
+=================
+Name                          Total Count        Time (ms)    Min Time (ms)    Max Time (ms)    Avg Time (ms)
+----                          -----------        ---------    -------------    -------------    -------------
+_npx_reshape,_npi_less,_npx_reshape,_npi_less,_npi_multiply,Cast,expand_dims,expand_dims,expand_dims,expand_dims,expand_dims,ex              11       11366.8379         478.7330        1826.8170        1033.3489
+_contrib_arange_like,expand_dims,Cast,_npi_full_like,_npi_add,_npi_stack,gather_nd,expand_dims,expand_dims,broadcast_like,broad              11         381.1770          18.1990          57.2090          34.6525
+WaitForVar                          36160         122.1940           0.0020           0.0270           0.0034
+CopyCPU2CPU                           305          85.0650           0.0030           4.7000           0.2789
+DeleteVariable                      57769          69.1480           0.0000           1.4890           0.0012
+_npi_zeros                            305          60.0940           0.0020           2.0370           0.1970
+expand_dims,batch_dot,_npi_squeeze,slice,_npx_reshape,_npi_concatenate,_contrib_quantize_v2,_sg_mkldnn_fully_connected,Activati              11          12.0030           0.9560           1.4520           1.0912
+Embedding                              22           8.5370           0.1010           1.1800           0.3880
+take,expand_dims,_npi_add,LayerNorm,Dropout,_contrib_arange_like,_npx_reshape              11           7.9580           0.4430           1.1300           0.7235
+_contrib_quantize_v2,_sg_mkldnn_fully_connected,_npi_squeeze              11           7.4500           0.5060           0.9900           0.6773
+ResourceParallelRandomSetSeed               1           3.9270           3.9270           3.9270           3.9270
+log_softmax                            22           2.8070           0.0280           0.2580           0.1276
+_sg_mkldnn_fully_connected,_npi_squeeze              11           2.4200           0.1460           0.6200           0.2200
+SequenceMask                           11           2.3930           0.0880           0.3240           0.2175
+_npi_add                               11           1.8330           0.0930           0.2920           0.1666
+topk                                   22           1.6450           0.0510           0.1860           0.0748
+DeleteOperator                         90           1.4300           0.0010           0.0790           0.0159
+softmax                                11           1.4020           0.0230           0.1500           0.1275
+Cast                                   44           0.9390           0.0080           0.3740           0.0213
+_npi_where_rscalar                     33           0.7130           0.0130           0.0390           0.0216
+expand_dims                            11           0.2460           0.0170           0.0320           0.0224
+_npi_multiply                          11           0.2450           0.0140           0.0620           0.0223
+_npi_rsubtract_scalar                  11           0.1640           0.0090           0.0380           0.0149
+_contrib_arange_like                   11           0.1600           0.0090           0.0520           0.0145
