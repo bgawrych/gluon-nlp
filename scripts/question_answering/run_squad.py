@@ -815,7 +815,40 @@ def predict_extended(original_feature,
     assert len(nbest_json) >= 1
     return not_answerable_score, nbest[0][0], nbest_json
 
+def quantize_and_calibrate(net, dataloader): 
+  class QuantizationDataLoader(mx.gluon.data.DataLoader):
+    def __init__(self, dataloader, use_segmentation):
+      self._dataloader = dataloader
+      self._iter = None
+      self._use_segmentation = use_segmentation
+   
+    def __iter__(self):
+      self._iter = iter(self._dataloader)
+      return self
+  
+    def __next__(self):
+      batch = next(self._iter)
+      if self._use_segmentation:
+        return [batch.data, batch.segment_ids, batch.valid_length]
+      else:
+        return [batch.data, batch.valid_length]
+  
+    def __del__(self):
+      del(self._dataloader)
 
+  calib_data = QuantizationDataLoader(dataloader, net.use_segmentation)
+  net.quantized_backbone = mx.contrib.quant.quantize_net(net.backbone, quantized_dtype='auto',
+                                        exclude_layers=None,
+                                        #exclude_layers_match=["sg_mkldnn_fully_connected_0"],
+                                        calib_data=calib_data,
+                                        calib_mode='naive',
+                                        num_calib_batches=10,
+                                        ctx=mx.current_context(),
+                                        logger=logging.getLogger())
+  net.quantized = True
+  return net 
+
+ 
 def evaluate(args, last=True):
     store, num_workers, rank, local_rank, is_master_node, ctx_l = init_comm(
         args.comm_backend, args.gpus)
@@ -859,7 +892,11 @@ def evaluate(args, last=True):
             batch_size=args.eval_batch_size,
             num_workers=0,
             shuffle=False)
+        #qa_net.optimize_for(mx.np.zeros((1,384)), mx.np.zeros((1,384)), mx.np.zeros((1,)), mx.np.zeros((1,384)), mx.np.zeros((1,)), backend="MKLDNN")
+        #qa_net.optimize("MKLDNN", mx.np.zeros((1, 384)), mx.np.zeros((1,)), mx.np.zeros((1,384)))
+        qnet = quantize_and_calibrate(qa_net, dev_dataloader)
 
+        
         log_interval = args.eval_log_interval
         all_results = []
         epoch_tic = time.time()

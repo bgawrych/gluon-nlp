@@ -74,6 +74,12 @@ class ModelForQABasic(HybridBlock):
         end_logits = masked_logsoftmax(end_scores, mask=p_mask, axis=-1)
         return start_logits, end_logits
 
+    def optimize(backend, tokens, valid_length, token_types=None):
+        if self.use_segmentation:
+            self.backbone.optimize_for(tokens, token_types, valid_length, backend=backend)
+        else:
+            self.backbone.optimize_for(tokens, valid_length, backend=backend)
+           
     def inference(self, tokens, token_types, valid_length, p_mask,
                   start_top_n: int = 5, end_top_n: int = 5):
         """Get the inference result with beam search
@@ -180,6 +186,8 @@ class ModelForQAConditionalV1(HybridBlock):
         self.answerable_scores.add(nn.Dense(2, flatten=False,
                                             weight_initializer=weight_initializer,
                                             bias_initializer=bias_initializer))
+        self.quantized_backbone = None
+        self.quantized = False
 
     def get_start_logits(self, contextual_embedding, p_mask):
         """
@@ -337,11 +345,15 @@ class ModelForQAConditionalV1(HybridBlock):
             The answerable logits. Here 0 --> answerable and 1 --> not answerable.
             Shape (batch_size, sequence_length, 2)
         """
+        backbone_net = self.backbone
+        if self.quantized:
+           backbone_net = self.quantized_backbone
+
         # Shape (batch_size, sequence_length, C)
         if self.use_segmentation:
-            contextual_embeddings = self.backbone(tokens, token_types, valid_length)
+            contextual_embeddings = backbone_net(tokens, token_types, valid_length)
         else:
-            contextual_embeddings = self.backbone(tokens, valid_length)
+            contextual_embeddings = backbone_net(tokens, valid_length)
         start_logits = self.get_start_logits(contextual_embeddings, p_mask)
         # The shape of start_top_index will be (..., start_top_n)
         start_top_logits, start_top_index = mx.npx.topk(start_logits, k=start_top_n, axis=-1,
@@ -354,3 +366,10 @@ class ModelForQAConditionalV1(HybridBlock):
         answerable_logits = self.get_answerable_logits(contextual_embeddings, p_mask)
         return start_top_logits, start_top_index, end_top_logits, end_top_index, \
                     answerable_logits
+
+
+    def optimize(self, backend, tokens, valid_length, token_types=None):
+        if self.use_segmentation:
+            self.backbone.optimize_for(tokens, token_types, valid_length, backend=backend)
+        else:
+            self.backbone.optimize_for(tokens, valid_length, backend=backend)
